@@ -1,0 +1,4 @@
+apiVersion: v2
+name: sonar-sentry-daemonset-chart
+description: A Helm chart for Kubernetes to deploy an Logpresso Sentry DaemonSet
+version: 0.1.0

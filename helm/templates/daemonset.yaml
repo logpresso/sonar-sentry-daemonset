@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: sonar-sentry
+spec:
+  selector:
+    matchLabels:
+      app: sonar-sentry
+  template:
+    metadata:
+      labels:
+        app: sonar-sentry
+    spec:
+      containers:
+      - name: sonar-sentry
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: AUTH_TOKEN
+          value: "{{ .Values.env.AUTH_TOKEN }}"
+        - name: DEPLOY_URL
+          value: "{{ .Values.env.DEPLOY_URL }}"
+        - name: GUID
+          value: "{{ .Values.env.GUID }}"
+        - name: BASE_ADDR
+          value: "{{ .Values.env.BASE_ADDR }}"
+        ports:
+        - containerPort: 7022
+        - containerPort: 514
+        volumeMounts:
+        - name: host-pods-log
+          mountPath: /var/log/pods
+        - name: host-container-log
+          mountPath: /var/lib/docker
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "/opt/logpresso-sentry/logpresso stop"]
+        # resources:
+        #   requests:
+        #     cpu: "100m"
+        #     memory: "128Mi"
+        #   limits:
+        #     cpu: "500m"
+        #     memory: "256Mi"
+      volumes:
+      - name: host-pods-log
+        hostPath:
+          path: /var/log/pods
+          type: Directory
+      - name: host-container-log
+        hostPath:
+          path: /var/lib/docker
+          type: Directory

@@ -1,0 +1,11 @@
+image:
+  repository: sonar-sentry
+  tag: latest
+  pullPolicy: IfNotPresent
+
+env:
+  GUID: "k8s-test"
+  AUTH_TOKEN: "9225-msen"
+  DEPLOY_URL: "https://host.docker.internal:44300"
+  BASE_ADDR: "host.docker.internal"
+
