@@ -14,18 +14,19 @@ To install the chart with the release name `SITENAME-sentry`:
 ```bash
 helm repo add logpresso https://lab.logpresso.com/sonar-sentry-daemonset
 helm repo update
-helm install SITENAME-sentry logpresso/sonar-sentry-daemonset
 
-curl -sSL https://lab.logpresso.com/sonar-sentry-daemonset/create-secrets.sh | bash
+echo -n "Sonar API Key: " && read -s SONAR_API_KEY && export SONAR_API_KEY && bash -c "curl -sSL https://lab.logpresso.com/sonar-sentry-daemonset/create-secrets.sh 2>/dev/null | bash"
+
+helm install SITENAME-sentry logpresso/sonar-sentry-daemonset
 ```
 
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `my-release` deployment:
+To uninstall/delete the `SITENAME-sentry` deployment:
 
 ```bash
-helm delete my-release
+helm delete SITENAME-sentry
 ```
 
 This command removes all the Kubernetes components associated with the chart and deletes the release.
