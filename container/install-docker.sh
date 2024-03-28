@@ -12,11 +12,9 @@ if [ -e /etc/secrets/sentry-auth-token ]; then
 	API_TARGET=${DEPLOY_URL/:44300/:$CONTROL_API_PORT}/api/sonar/sentries
 	echo GUID: $GUID
 	echo API_TARGET: $API_TARGET
-	RESPONSE=$(curl -k -X POST "$API_TARGET" \
+	RESPONSE=$(curl -q -k -X POST "$API_TARGET" \
 		-d "sentry_guid=${GUID}&auth_token=${TOKEN}&os=linux&base=$BASE" \
 		-H "Authorization: Bearer ${SONAR_API_KEY}")
-
-	echo RESPONSE: $RESPONSE
 fi
 
 function detect_os_version() {
