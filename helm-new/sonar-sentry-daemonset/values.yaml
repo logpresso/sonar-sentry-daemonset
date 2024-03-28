@@ -2,7 +2,7 @@
 # replicaCount: 1
 
 image:
-  repository: sonar-sentry
+  repository: public.ecr.aws/z5g1b4t8/sonar-sentry-dev
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "latest"
