@@ -1,8 +1,23 @@
-TOKEN=$AUTH_TOKEN
+HOST_IDENTIFIER=$(echo $HOSTNAME | awk -F'-' '{print $NF}')
+GUID=${SENTRY_GUID_PREFIX:-sonar-sentry-}$HOST_IDENTIFIER
+TOKEN=`cat /etc/secrets/sentry-auth-token`
 URL=$DEPLOY_URL
 BASE=$BASE_HOSTNAME
 RPC_PORT=7140
 CONF_FILE=logpresso.conf
+
+if [ -e /etc/secrets/sentry-auth-token ]; then
+	SONAR_API_KEY=`cat /etc/secrets/sonar-api-key`
+	echo "Registring Daemonset Sentry..."
+	API_TARGET=${DEPLOY_URL/:44300/:$CONTROL_API_PORT}/api/sonar/sentries
+	echo GUID: $GUID
+	echo API_TARGET: $API_TARGET
+	RESPONSE=$(curl -k -X POST "$API_TARGET" \
+		-d "sentry_guid=${GUID}&auth_token=${TOKEN}&os=linux&base=$BASE" \
+		-H "Authorization: Bearer ${SONAR_API_KEY}")
+
+	echo RESPONSE: $RESPONSE
+fi
 
 function detect_os_version() {
     if [ -f "/etc/os-release" ]; then

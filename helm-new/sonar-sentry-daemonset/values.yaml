@@ -1,0 +1,103 @@
+# Sonar Sentries are Daemonset
+# replicaCount: 1
+
+image:
+  repository: sonar-sentry
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+sonar:
+  guidPrefix: ""
+  guidSuffix: ""
+
+env:
+- name: DEPLOY_URL
+  value: "https://host.docker.internal:44300"
+- name: BASE_ADDR
+  value: "host.docker.internal"
+- name: CONTROL_API_PORT
+  value: "8443"
+
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+# REMOVED: DaemonSet does not need a service
+# service:
+
+# REMOVED: DaemonSet does not need ingress
+ingress:
+  enabled: false
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# not supported yet
+# livenessProbe:
+# readinessProbe:
+
+# not supported yet
+autoscaling:
+  enabled: false
+
+# Additional volumes on the output Deployment definition.
+volumes:
+  - name: host-pods-log
+    hostPath:
+      path: /var/log/pods
+      type: Directory
+  - name: host-container-log
+    hostPath:
+      path: /var/lib/docker
+      type: Directory
+  - name: secret-volume
+    secret:
+      secretName: sentry-secrets  # Secret 이름
+
+# Additional volumeMounts on the output Deployment definition.
+volumeMounts:
+  - name: host-pods-log
+    mountPath: /var/log/pods
+  - name: host-container-log
+    mountPath: /var/lib/docker
+  - name: secret-volume
+    mountPath: "/etc/secrets"  # Secret 데이터가 마운트될 경로
+    readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

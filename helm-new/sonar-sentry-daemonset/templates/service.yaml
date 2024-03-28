@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "sonar-sentry-daemonset.fullname" . }}
+  labels:
+    {{- include "sonar-sentry-daemonset.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  {{/* type: {{ .Values.service.type }} */}}
+  ports:
+    - name: sentry-diag
+      protocol: TCP
+      port: 7022
+      targetPort: 7022
+    - name: sentry-syslog
+      protocol: UDP
+      port: 514
+      targetPort: 514
+  selector:
+    {{- include "sonar-sentry-daemonset.selectorLabels" . | nindent 4 }}
