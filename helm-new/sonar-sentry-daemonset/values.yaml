@@ -1,24 +1,13 @@
 # Sonar Sentries are Daemonset
 # replicaCount: 1
 
-image:
-  repository: public.ecr.aws/z5g1b4t8/sonar-sentry-dev
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
-
 sonar:
   guidPrefix: ""
   guidSuffix: ""
-
-env:
-- name: DEPLOY_URL
-  value: "https://host.docker.internal:44300"
-- name: BASE_ADDR
-  value: "host.docker.internal"
-- name: CONTROL_API_PORT
-  value: "8443"
-
+  secretName: "sentry-secrets"
+  secretNamespace: "default"
+  deployUrl: https://TENANT.logpresso.cloud:44300 
+  baseAddr: TENANT.nlb.logpresso.cloud
 
 imagePullSecrets: []
 nameOverride: ""
@@ -74,29 +63,25 @@ autoscaling:
 
 # Additional volumes on the output Deployment definition.
 volumes:
-  - name: host-pods-log
+  - name: k8s-log
     hostPath:
-      path: /var/log/pods
+      path: /var/log
       type: Directory
-  - name: host-container-log
-    hostPath:
-      path: /var/lib/docker
-      type: Directory
-  - name: secret-volume
-    secret:
-      secretName: sentry-secrets  # Secret 이름
+  # - name: host-docker-desktop-logs
+  #  hostPath:
+  #    path: /var/lib/docker
+  #    type: Directory
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts:
-  - name: host-pods-log
-    mountPath: /var/log/pods
-  - name: host-container-log
-    mountPath: /var/lib/docker
-  - name: secret-volume
-    mountPath: "/etc/secrets"  # Secret 데이터가 마운트될 경로
-    readOnly: true
+  - name: k8s-log
+    mountPath: /mnt/log
+  # - name: host-container-log
+  #   mountPath: /var/lib/docker
 
-nodeSelector: {}
+nodeSelector: 
+  {}
+  # "namespace/roles": node_value
 
 tolerations: []
 

@@ -1,14 +1,15 @@
-HOST_IDENTIFIER=$(echo $HOSTNAME | awk -F'-' '{print $NF}')
-GUID=${SENTRY_GUID_PREFIX:-sonar-sentry-}$HOST_IDENTIFIER
-TOKEN=`cat /etc/secrets/sentry-auth-token`
+SENTRY_IDENTIFIER=${SENTRY_IDENTIFIER:-$(echo -n $K8S_NODE_NAME | sha1sum | cut -c 1-6)}
+GUID=${SENTRY_GUID_PREFIX:-sonar-sentry-}$SENTRY_IDENTIFIER
+TOKEN=${SENTRY_AUTH_TOKEN}
 URL=$DEPLOY_URL
-BASE=$BASE_HOSTNAME
+BASE=$BASE_ADDR
 RPC_PORT=7140
 CONF_FILE=logpresso.conf
 
-if [ -e /etc/secrets/sentry-auth-token ]; then
-	SONAR_API_KEY=`cat /etc/secrets/sonar-api-key`
-	echo "Registring Daemonset Sentry..."
+if [ -n "$TOKEN" ]; then
+    echo "Public IP: `curl ifconfig.me`"
+	#SONAR_API_KEY=${SONAR_API_KEY:-`cat /etc/secrets/sonar-api-key`}
+	echo "Registering Daemonset Sentry..."
 	API_TARGET=${DEPLOY_URL/:44300/:$CONTROL_API_PORT}/api/sonar/sentries
 	echo GUID: $GUID
 	echo API_TARGET: $API_TARGET
@@ -44,6 +45,9 @@ if [ -z "$TOKEN" ]; then TOKEN="$2"; fi
 if [ -z "$URL" ]; then URL="$3"; fi
 
 if [ -z "$GUID" ] || [ -z "$TOKEN" ] || [ -z "$URL" ]; then
+    echo GUID: [$GUID]
+    echo TOKEN: [$TOKEN]
+    echo URL: [$URL]
     PRINT_USAGE=1
 fi
 
@@ -131,7 +135,8 @@ fi
 
 cd $TARGET_DIR
 
-echo -n "Downloading Java Runtime Environment..."
+echo "Downloading Java Runtime Environment..."
+echo URL: $JRE_URL
 wget --no-check-certificate -q -O "$TARGET_DIR"/jre.gz "$JRE_URL" || rm "$TARGET_DIR"/jre.gz
 
 if [ -f "$TARGET_DIR"/jre.gz ]; then
@@ -143,7 +148,7 @@ else
   exit 1
 fi
 
-echo -n "Downloading Logpresso Linux Sentry..."
+echo "Downloading Logpresso Linux Sentry..."
 wget --no-check-certificate -q -O "$TARGET_DIR"/sentry.zip "$PKG_URL" || rm "$TARGET_DIR"/sentry.zip
 
 if [ -f "$TARGET_DIR/sentry.zip" ]; then
@@ -157,7 +162,7 @@ else
   exit 1
 fi
 
-echo -n "Extracting Java Runtime Environment..."
+echo "Extracting Java Runtime Environment..."
 mkdir "$TARGET_DIR"/jre
 tar xzpf "$TARGET_DIR"/jre.gz -C "$TARGET_DIR"/jre
 rm "$TARGET_DIR"/jre.gz
@@ -167,7 +172,7 @@ mv "$TARGET_DIR"/jre/"$JRE_DIR"/* "$TARGET_DIR"/jre/
 rmdir "$TARGET_DIR"/jre/"$JRE_DIR"
 echo "done"
 
-echo -n "Extracting Logpresso Linux Sentry..."
+echo "Extracting Logpresso Linux Sentry..."
 unzip -q -o "$TARGET_DIR"/sentry.zip -d "$TARGET_DIR"
 rm "$TARGET_DIR"/sentry.zip
 echo "done"

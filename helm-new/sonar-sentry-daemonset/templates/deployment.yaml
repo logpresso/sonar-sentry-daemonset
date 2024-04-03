@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Daemonset
+kind: DaemonSet
 metadata:
   name: {{ include "sonar-sentry-daemonset.fullname" . }}
   labels:
@@ -34,8 +34,8 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "public.ecr.aws/z5g1b4t8/sonar-sentry-dev:1.0.0"
+          imagePullPolicy: Always
           ports:
             - name: sentry-diag
               containerPort: 7022
@@ -43,10 +43,26 @@ spec:
             - name: sentry-syslog
               containerPort: 514
               protocol: UDP
+          envFrom:
+          - secretRef:
+              namespace: {{ .Values.sonar.secretNamespace }}
+              name: {{ .Values.sonar.secretName }}
           env:
-            - name: SENTRY_GUID_PREFIX
+            - name: DEPLOY_URL
+              value: "{{- .Values.sonar.deployUrl -}}"
+            - name: BASE_ADDR
+              value: "{{- .Values.sonar.baseAddr -}}"
+            - name: "SENTRY_GUID_PREFIX"
               value: "{{- include "sonar-sentry-daemonset.guidPrefix" . -}}"
-            {{- toYaml .Values.env | nindent 12 }}
+            - name: CONTROL_API_PORT
+              value: "{{ default 443 .Values.sonar.controlApiPort }}"
+            - name: K8S_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            {{- with .Values.env }}
+              {{- toYaml . | nindent 12 }}
+            {{- end }}
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
           readinessProbe:
