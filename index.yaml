@@ -1,54 +1,14 @@
 apiVersion: v1
 entries:
-  sonar-sentry-daemonset:
+  sentry-daemonset:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-03-28T15:58:53.811316866+09:00"
+    created: "2024-04-03T22:16:05.429250021+09:00"
     description: A Helm chart for Sonar Sentry Daemonset
-    digest: 833da710fdbcda038a7ff0b677e3d77b77ca0cf9421054e31b68bd93593a42bc
-    name: sonar-sentry-daemonset
+    digest: 6606573e8797a0f1c6ce9fe27873196b51fab9702017b7b1d389e61dac5a80a7
+    name: sentry-daemonset
     type: application
     urls:
-    - sonar-sentry-daemonset-0.5.0.tgz
-    version: 0.5.0
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2024-03-28T15:58:53.810620837+09:00"
-    description: A Helm chart for Sonar Sentry Daemonset
-    digest: 1373a5aefd600c075e1f58326656c536632b8280c60343c87413c6d67576d46b
-    name: sonar-sentry-daemonset
-    type: application
-    urls:
-    - sonar-sentry-daemonset-0.4.0.tgz
-    version: 0.4.0
-  - apiVersion: v2
-    appVersion: 1.16.0
-    created: "2024-03-28T15:58:53.810034413+09:00"
-    description: A Helm chart for Sonar Sentry Daemonset
-    digest: 21a99a494bda60602796c60da4a4f0e679fef8245f13d31079d094843f7cc768
-    name: sonar-sentry-daemonset
-    type: application
-    urls:
-    - sonar-sentry-daemonset-0.3.0.tgz
-    version: 0.3.0
-  - apiVersion: v2
-    appVersion: 1.16.0
-    created: "2024-03-28T15:58:53.808325242+09:00"
-    description: A Helm chart for Sonar Sentry Daemonset
-    digest: 108d4fa4e7d99781913c02915f1505d6352e749ed0628491bc099eae6b94e205
-    name: sonar-sentry-daemonset
-    type: application
-    urls:
-    - sonar-sentry-daemonset-0.2.0.tgz
-    version: 0.2.0
-  - apiVersion: v2
-    appVersion: 1.16.0
-    created: "2024-03-28T15:58:53.807960627+09:00"
-    description: A Helm chart for Sonar Sentry Daemonset
-    digest: 9787ef56421c33ad5aad6c0858b4e10265f56da074dab66c77c5f4e7acc95f0d
-    name: sonar-sentry-daemonset
-    type: application
-    urls:
-    - sonar-sentry-daemonset-0.1.0.tgz
-    version: 0.1.0
-generated: "2024-03-28T15:58:53.807496307+09:00"
+    - sentry-daemonset-0.0.1.tgz
+    version: 0.0.1
+generated: "2024-04-03T22:16:05.428863723+09:00"
