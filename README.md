@@ -18,12 +18,9 @@ helm repo update logpresso
 helm show values logpresso/sentry-daemonset
 
 # Create OWN values-TENANT.yaml using "sonar:" section from previous output
-# You must override deployUrl, baseAddr, secret.sonarApiKey
+# You must override deployUrl, baseAddr
 
-# Generate a random value for SENTRY_AUTH_TOKEN
-export SENTRY_AUTH_TOKEN=`tr -dc a-z0-9 </dev/urandom | head -c 4`-`tr -dc a-z0-9 </dev/urandom | head -c 4`
-
-helm install TENANT-sentry logpresso/sentry-daemonset -f values-TENANT.yaml --set sonar.secret.sentryAuthToken=$SENTRY_AUTH_TOKEN
+helm install TENANT-sentry logpresso/sentry-daemonset -f values-TENANT.yaml
 ```
 
 
@@ -47,7 +44,5 @@ This command removes all the Kubernetes components associated with the chart and
 | `sonar.baseAddr` | Address of the Sentry Base (usually NLB) | `TENANT.nlb.logpresso.cloud` |
 | `sonar.secret.name` | Name of K8S secret store | `sentry-secrets` |
 | `sonar.secret.namespace` | Namespace of Node labels for pod assignment | `default` |
-| `sonar.secret.sonarApiKey` | Sonar API key of Sentry Management User on Sonar (GUID) | `""` |
-| `sonar.secret.sentryAuthToken` | Authentication token when Sentry connects to the Sentry Base | `{}` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`
