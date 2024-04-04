@@ -30,8 +30,8 @@ helm package ../$CHART_DIR
 
 helm repo index --merge ../index.yaml .
 mv index.yaml *.tgz ../
-if [ -f ../$CHART_DIR/README.md ]; then
-	cp ../$CHART_DIR/README.md ..
+if [ -f ../$CHART_DIR/../README.md ]; then
+	cp ../$CHART_DIR/../README.md ..
 fi
 
 popd
