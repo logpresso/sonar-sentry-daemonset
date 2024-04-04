@@ -1,75 +1,26 @@
 apiVersion: v1
 entries:
-  sentry-daemonset:
+  sonar-sentry-daemonset:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2024-04-04T12:00:24.746137161+09:00"
+    created: "2024-04-04T22:48:57.117655847+09:00"
     description: A Helm Chart for Sonar Sentry Daemonset
-    digest: bd87c58e78e29d39a0782f14d4dac289d5b3cfb28467465824621be73338c8d3
-    name: sentry-daemonset
+    digest: 33f57b247099139ffcd3f38c6183d623b8bed2e9d8102f81a8a1239a251ab708
+    name: sonar-sentry-daemonset
     type: application
     urls:
-    - sentry-daemonset-0.0.4.tgz
-    version: 0.0.4
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2024-04-04T11:03:53.492820498+09:00"
-    description: A Helm chart for Sonar Sentry Daemonset
-    digest: 9c71a9a5a5d7582d5d84246194f133abe556b4346bd1817c302f4cccf39ad7ff
-    name: sentry-daemonset
-    type: application
-    urls:
-    - sentry-daemonset-0.0.3.tgz
-    version: 0.0.3
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2024-04-04T08:16:19.623745286+09:00"
-    description: A Helm chart for Sonar Sentry Daemonset
-    digest: 3f6566a94759140e9c80f80d0a122d05ac60ffd54b2198b968b893188e89ad8e
-    name: sentry-daemonset
-    type: application
-    urls:
-    - sentry-daemonset-0.0.2.tgz
-    version: 0.0.2
-  - apiVersion: v2
-    appVersion: 1.0.0
-    created: "2024-04-03T22:16:05.429250021+09:00"
-    description: A Helm chart for Sonar Sentry Daemonset
-    digest: 6606573e8797a0f1c6ce9fe27873196b51fab9702017b7b1d389e61dac5a80a7
-    name: sentry-daemonset
-    type: application
-    urls:
-    - sentry-daemonset-0.0.1.tgz
-    version: 0.0.1
-  sentry-secrets:
+    - sonar-sentry-daemonset-0.0.5.tgz
+    version: 0.0.5
+  sonar-sentry-secrets:
   - apiVersion: v2
     appVersion: 0.1.0
-    created: "2024-04-04T10:16:27.934668353+09:00"
-    description: A Helm Chart to install TENANT-private secrets.
-    digest: f617e718b774b83857936cf583ba38738bde385524a399a092d9f7432e03db16
-    name: sentry-secrets
+    created: "2024-04-04T22:48:57.117793151+09:00"
+    description: A Helm Chart to install TENANT-private secrets for Logpresso Sonar
+      Sentry.
+    digest: c104e42cb61da4fa3d80ec190eac70b46d0996417918e29396583aa180e33c73
+    name: sonar-sentry-secrets
     type: application
     urls:
-    - sentry-secrets-0.0.3.tgz
-    version: 0.0.3
-  - apiVersion: v2
-    appVersion: 0.1.0
-    created: "2024-04-04T09:45:53.552437835+09:00"
-    description: A Helm Chart to install TENANT-private secrets.
-    digest: a34eb516ba78bef422073045d8ca3e9caa6b0af21f7458a32152cfa768c866cb
-    name: sentry-secrets
-    type: application
-    urls:
-    - sentry-secrets-0.0.2.tgz
-    version: 0.0.2
-  - apiVersion: v2
-    appVersion: 0.0.1
-    created: "2024-04-04T09:36:35.119586975+09:00"
-    description: A Helm Chart to install TENANT-private secrets.
-    digest: f4097e4971cb53d8480d760ad4a25dfbe6b13c59f9c5ef15bfb85b12a0f8621e
-    name: sentry-secrets
-    type: application
-    urls:
-    - sentry-secrets-0.1.0.tgz
+    - sonar-sentry-secrets-0.0.1.tgz
     version: 0.0.1
-generated: "2024-04-04T12:00:24.745747558+09:00"
+generated: "2024-04-04T22:48:57.117220436+09:00"

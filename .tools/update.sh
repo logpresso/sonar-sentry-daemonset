@@ -1,5 +1,7 @@
 #!/bin/bash
 
+CHART=${1:-sonar-sentry-daemonset}
+
 set -e
 
 if [ ! -f index.yaml ]; then
@@ -8,7 +10,7 @@ if [ ! -f index.yaml ]; then
 	exit 1
 fi
 
-CHART_DIR="../sonar-sentry-daemonset/helm-new/sonar-sentry-daemonset"
+CHART_DIR="../sonar-sentry-daemonset/helm-new/$CHART"
 NAME=$(grep -E "^name:" $CHART_DIR/Chart.yaml | awk '{print $2}')
 pushd $CHART_DIR
 
@@ -28,7 +30,9 @@ helm package ../$CHART_DIR
 
 helm repo index --merge ../index.yaml .
 mv index.yaml *.tgz ../
-cp ../$CHART_DIR/README.md ..
+if [ -f ../$CHART_DIR/README.md ]; then
+	cp ../$CHART_DIR/README.md ..
+fi
 
 popd
 rm -rf tmp

@@ -7,32 +7,37 @@ This Helm chart deploys the Sonar Sentry DaemonSet on a [Kubernetes](http://kube
 - Kubernetes 1.14+
 - Helm 3.1.0
 
-## Installing the Chart
-
-To install the chart with the release name `SITENAME-sentry`:
+## Installing Logpresso Sonar Sentry
 
 ```bash
-helm repo add logpresso https://lab.logpresso.com/sonar-sentry-daemonset
+helm repo add logpresso https://lab.logpresso.com/helm-charts
 helm repo update logpresso
+
+export SENTRY_AUTH_TOKEN=`tr -dc a-z0-9 </dev/urandom | head -c 4`-`tr -dc a-z0-9 </dev/urandom | head -c 4`
+export SONAR_API_KEY="########-####-####-####-############"
+
+helm install sonar-sentry-secrets logpresso/sonar-sentry-secrets \
+    --set sonar.sentryAuthToken=$SENTRY_AUTH_TOKEN \
+    --set sonar.sonarApiKey=$SONAR_API_KEY \
+    --set sonar.secret.namespace=default
 
 helm show values logpresso/sentry-daemonset
 
 # Create OWN values-TENANT.yaml using "sonar:" section from previous output
 # You must override deployUrl, baseAddr
 
-helm install TENANT-sentry logpresso/sentry-daemonset -f values-TENANT.yaml
+helm install sonar-sentry-TENANT logpresso/sentry-daemonset -f values-TENANT.yaml
 ```
 
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `TENANT-sentry` deployment:
-
 ```bash
-helm delete TENANT-sentry
-```
+helm uninstall sonar-sentry-TENANT
 
-This command removes all the Kubernetes components associated with the chart and deletes the release.
+## Uninstalling Sentry Permanently
+helm uninstall sonar-sentry-secrets
+```
 
 ## Parameters
 
