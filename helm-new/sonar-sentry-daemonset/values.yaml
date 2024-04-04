@@ -1,14 +1,6 @@
 # Sonar Sentries are Daemonset
 # replicaCount: 1
 
-sonar:
-  guidPrefix: ""
-  guidSuffix: ""
-  secretName: "sentry-secrets"
-  secretNamespace: "default"
-  deployUrl: https://TENANT.logpresso.cloud:44300 
-  baseAddr: TENANT.nlb.logpresso.cloud
-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -86,3 +78,13 @@ nodeSelector:
 tolerations: []
 
 affinity: {}
+
+## Override the following section as needed
+sonar:
+  guidPrefix: "TENANT-"
+  guidSuffix: ""
+  deployUrl: https://TENANT.logpresso.cloud:44300 
+  baseAddr: TENANT.nlb.logpresso.cloud
+  secret:
+    name: "sentry-secrets"
+    namespace: "default"

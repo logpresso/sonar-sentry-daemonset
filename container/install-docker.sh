@@ -98,6 +98,7 @@ echo "Pre-checking for Logpresso Sentry Installation succeeded."
 
 # Define a function for error handling
 error_handling() {
+    ORIG_ERROR=$?
     echo "An error occurred. Starting rollback..."
 
     rm -rf $TARGET_DIR
@@ -105,7 +106,7 @@ error_handling() {
     echo "Rollback completed."
 
     # Exit with the original error status
-    exit $?
+    exit $ORIG_ERROR
 }
 
 # Set up the trap to call error_handling function on any error
@@ -148,8 +149,17 @@ else
   exit 1
 fi
 
+set +e 
 echo "Downloading Logpresso Linux Sentry..."
 wget --no-check-certificate -q -O "$TARGET_DIR"/sentry.zip "$PKG_URL" || rm "$TARGET_DIR"/sentry.zip
+if [ ! -f "$TARGET_DIR/sentry.zip" ]; then
+    echo "retrying once more..."
+    set -e
+    # retry once for ALB
+    wget --no-check-certificate -q -O "$TARGET_DIR"/sentry.zip "$PKG_URL" || rm "$TARGET_DIR"/sentry.zip
+fi
+set -e
+
 
 if [ -f "$TARGET_DIR/sentry.zip" ]; then
   echo "done"
@@ -190,6 +200,19 @@ if [ -f $SCRIPT_DIR/logpresso.conf ]; then
 else 
 	"$TARGET_DIR"/logpresso install config -m sentry
 fi
+
+set +e
+trap - ERR
 "$TARGET_DIR"/logpresso install sentry -g "$GUID" -t "$TOKEN" -a "$URL" -b "$BASE" -p "$RPC_PORT"
+SENTRY_INSTALL_ERROR=$?
+if [ ! "$SENTRY_INSTALL_ERROR" == "0" ]; then
+    echo "retrying once more..."
+    set -e
+    trap 'error_handling' ERR
+    # retry once for ALB
+    "$TARGET_DIR"/logpresso install sentry -g "$GUID" -t "$TOKEN" -a "$URL" -b "$BASE" -p "$RPC_PORT"
+fi
+set -e
+
 echo "done"
 

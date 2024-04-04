@@ -1,0 +1,13 @@
+
+## Use following lines to apply TENANT-private sentryAuthToken
+
+export SENTRY_AUTH_TOKEN=`tr -dc a-z0-9 </dev/urandom | head -c 4`-`tr -dc a-z0-9 </dev/urandom | head -c 4`
+export SONAR_API_KEY="########-####-####-####-############"
+
+# uninstall first if needed
+helm uninstall {{ .Release.Name }}
+
+helm install {{ .Release.Name }} sonar/{{ .Chart.Name }} \
+    --set sonar.sentryAuthToken=$SENTRY_AUTH_TOKEN \
+    --set sonar.sonarApiKey=$SONAR_API_KEY \
+    --set sonar.secret.namespace=default

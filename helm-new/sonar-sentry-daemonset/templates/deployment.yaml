@@ -6,7 +6,6 @@ metadata:
     {{- include "sonar-sentry-daemonset.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
@@ -45,8 +44,7 @@ spec:
               protocol: UDP
           envFrom:
           - secretRef:
-              namespace: {{ .Values.sonar.secretNamespace }}
-              name: {{ .Values.sonar.secretName }}
+              name: {{ .Values.sonar.secret.name }}
           env:
             - name: DEPLOY_URL
               value: "{{- .Values.sonar.deployUrl -}}"

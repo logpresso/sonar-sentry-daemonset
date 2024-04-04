@@ -1,0 +1,8 @@
+## Override the following section as needed
+sonar:
+  secret:
+    name: "sonar-sentry-secrets"
+    namespace: "default"
+  sonarApiKey: "OVERRIDE_ME(GUID)"
+  # tr -dc a-z0-9 </dev/urandom | head -c 4`-`tr -dc a-z0-9 </dev/urandom | head -c 4
+  sentryAuthToken: "OVERRIDE using --set (AAAA-AAAA)"
