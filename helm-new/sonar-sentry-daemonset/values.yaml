@@ -81,10 +81,9 @@ affinity: {}
 
 ## Override the following section as needed
 sonar:
-  guidPrefix: "TENANT-"
+  guidPrefix: ""
   guidSuffix: ""
   deployUrl: https://TENANT.logpresso.cloud:44300 
   baseAddr: TENANT.nlb.logpresso.cloud
   secret:
-    name: "sentry-secrets"
-    namespace: "default"
+    name: "sonar-sentry-secrets"

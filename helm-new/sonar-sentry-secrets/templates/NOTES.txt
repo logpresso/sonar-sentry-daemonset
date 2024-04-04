@@ -7,7 +7,7 @@ export SONAR_API_KEY="########-####-####-####-############"
 # uninstall first if needed
 helm uninstall {{ .Release.Name }}
 
-helm install {{ .Release.Name }} sonar/{{ .Chart.Name }} \
+helm install {{ .Release.Name }} logpresso/{{ .Chart.Name }} \
     --set sonar.sentryAuthToken=$SENTRY_AUTH_TOKEN \
     --set sonar.sonarApiKey=$SONAR_API_KEY \
-    --set sonar.secret.namespace=default
+    -n default

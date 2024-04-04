@@ -19,21 +19,21 @@ export SONAR_API_KEY="########-####-####-####-############"
 helm install sonar-sentry-secrets logpresso/sonar-sentry-secrets \
     --set sonar.sentryAuthToken=$SENTRY_AUTH_TOKEN \
     --set sonar.sonarApiKey=$SONAR_API_KEY \
-    --set sonar.secret.namespace=default
+    -n default
 
 helm show values logpresso/sentry-daemonset
 
 # Create OWN values-TENANT.yaml using "sonar:" section from previous output
 # You must override deployUrl, baseAddr
 
-helm install TENANT-sentry logpresso/sentry-daemonset -f values-TENANT.yaml
+helm install TENANT logpresso/sentry-daemonset -f values-TENANT.yaml
 ```
 
 
 ## Uninstalling the Chart
 
 ```bash
-helm uninstall TENANT-sentry
+helm uninstall TENANT
 
 ## Uninstalling Sentry Permanently
 helm uninstall sonar-sentry-secrets
@@ -47,7 +47,6 @@ helm uninstall sonar-sentry-secrets
 | `sonar.guidSuffix` | Suffix string for the Sentry guid | `""` |
 | `sonar.deployUrl` | URL to download JRE, Sentry Package from Sonar | `https://TENANT.logpresso.cloud:44300` |
 | `sonar.baseAddr` | Address of the Sentry Base (usually NLB) | `TENANT.nlb.logpresso.cloud` |
-| `sonar.secret.name` | Name of K8S secret store | `sentry-secrets` |
-| `sonar.secret.namespace` | Namespace of Node labels for pod assignment | `default` |
+| `sonar.secret.name` | Name of K8S secret store | `sonar-sentry-secrets` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`
