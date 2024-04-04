@@ -4,7 +4,7 @@ This Helm chart deploys the Sonar Sentry DaemonSet on a [Kubernetes](http://kube
 
 ## Prerequisites
 
-- Kubernetes 1.12+
+- Kubernetes 1.14+
 - Helm 3.1.0
 
 ## Installing the Chart
@@ -13,20 +13,26 @@ To install the chart with the release name `SITENAME-sentry`:
 
 ```bash
 helm repo add logpresso https://lab.logpresso.com/sonar-sentry-daemonset
-helm repo update
+helm repo update logpresso
 
-echo -n "Sonar API Key: " && read -s SONAR_API_KEY && export SONAR_API_KEY && bash -c "curl -sSL https://lab.logpresso.com/sonar-sentry-daemonset/create-secrets.sh 2>/dev/null | bash"
+helm show values logpresso/sentry-daemonset
 
-helm install SITENAME-sentry logpresso/sonar-sentry-daemonset
+# Create OWN values-TENANT.yaml using "sonar:" section from previous output
+# You must override deployUrl, baseAddr, secret.sonarApiKey
+
+# Generate a random value for SENTRY_AUTH_TOKEN
+export SENTRY_AUTH_TOKEN=`tr -dc a-z0-9 </dev/urandom | head -c 4`-`tr -dc a-z0-9 </dev/urandom | head -c 4`
+
+helm install TENANT-sentry logpresso/sentry-daemonset -f values-TENANT.yaml --set sonar.secret.sentryAuthToken=$SENTRY_AUTH_TOKEN
 ```
 
 
 ## Uninstalling the Chart
 
-To uninstall/delete the `SITENAME-sentry` deployment:
+To uninstall/delete the `TENANT-sentry` deployment:
 
 ```bash
-helm delete SITENAME-sentry
+helm delete TENANT-sentry
 ```
 
 This command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -35,23 +41,13 @@ This command removes all the Kubernetes components associated with the chart and
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
-| `serviceAccount.create` | Specifies whether a service account should be created | `true` |
-| `serviceAccount.name` | The name of the service account to use | `""` |
-| `podAnnotations` | Additional annotations to add to the pod | `{}` |
-| `podLabels` | Additional labels to add to the pod | `{}` |
-| `resources` | CPU/Memory resource requests/limits | `{}` |
-| `nodeSelector` | Node labels for pod assignment | `{}` |
-| `tolerations` | List of node taints to tolerate | `[]` |
-| `affinity` | Map of node/pod affinities | `{}` |
+| `sonar.guidPrefix` | Prefix string for the Sentry guid. Use the Release Name when empty. | `""` |
+| `sonar.guidSuffix` | Suffix string for the Sentry guid | `""` |
+| `sonar.deployUrl` | URL to download JRE, Sentry Package from Sonar | `https://TENANT.logpresso.cloud:44300` |
+| `sonar.baseAddr` | Address of the Sentry Base (usually NLB) | `TENANT.nlb.logpresso.cloud` |
+| `sonar.secret.name` | Name of K8S secret store | `sentry-secrets` |
+| `sonar.secret.namespace` | Namespace of Node labels for pod assignment | `default` |
+| `sonar.secret.sonarApiKey` | Sonar API key of Sentry Management User on Sonar (GUID) | `""` |
+| `sonar.secret.sentryAuthToken` | Authentication token when Sentry connects to the Sentry Base | `{}` |
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
-```bash
-helm install my-release logpresso/sonar-sentry-daemonset --set image.pullPolicy=Always
-```
-
-Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
-
-```bash
-helm install my-release logpresso/sonar-sentry-daemonset -f values.yaml
-```
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`
