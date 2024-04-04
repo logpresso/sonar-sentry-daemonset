@@ -23,15 +23,15 @@ entries:
     version: 0.0.1
   sentry-secrets:
   - apiVersion: v2
-    appVersion: 0.0.1
-    created: "2024-04-04T09:36:35.119586975+09:00"
+    appVersion: 0.1.0
+    created: "2024-04-04T10:16:27.934668353+09:00"
     description: A Helm Chart to install TENANT-private secrets.
-    digest: f4097e4971cb53d8480d760ad4a25dfbe6b13c59f9c5ef15bfb85b12a0f8621e
+    digest: f617e718b774b83857936cf583ba38738bde385524a399a092d9f7432e03db16
     name: sentry-secrets
     type: application
     urls:
-    - sentry-secrets-0.1.0.tgz
-    version: 0.0.1
+    - sentry-secrets-0.0.3.tgz
+    version: 0.0.3
   - apiVersion: v2
     appVersion: 0.1.0
     created: "2024-04-04T09:45:53.552437835+09:00"
@@ -42,4 +42,14 @@ entries:
     urls:
     - sentry-secrets-0.0.2.tgz
     version: 0.0.2
-generated: "2024-04-04T09:45:53.552179937+09:00"
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-04-04T09:36:35.119586975+09:00"
+    description: A Helm Chart to install TENANT-private secrets.
+    digest: f4097e4971cb53d8480d760ad4a25dfbe6b13c59f9c5ef15bfb85b12a0f8621e
+    name: sentry-secrets
+    type: application
+    urls:
+    - sentry-secrets-0.1.0.tgz
+    version: 0.0.1
+generated: "2024-04-04T10:16:27.934426752+09:00"
