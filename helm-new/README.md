@@ -21,12 +21,12 @@ helm install sonar-sentry-secrets logpresso/sonar-sentry-secrets \
     --set sonar.sonarApiKey=$SONAR_API_KEY \
     -n default
 
-helm show values logpresso/sentry-daemonset
+helm show values logpresso/sonar-sentry-daemonset
 
 # Create OWN values-TENANT.yaml using "sonar:" section from previous output
 # You must override deployUrl, baseAddr
 
-helm install TENANT logpresso/sentry-daemonset -f values-TENANT.yaml
+helm install TENANT logpresso/sonar-sentry-daemonset -f values-TENANT.yaml
 ```
 
 
