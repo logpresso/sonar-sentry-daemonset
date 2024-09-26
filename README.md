@@ -10,7 +10,7 @@ This Helm chart deploys the Sonar Sentry DaemonSet on a [Kubernetes](http://kube
 ## Installing Logpresso Sonar Sentry
 
 ```bash
-helm repo add logpresso https://lab.logpresso.com/helm-charts
+helm repo add logpresso https://lab.logpresso.com/sonar-sentry-daemonset
 helm repo update logpresso
 
 export SENTRY_AUTH_TOKEN=`tr -dc a-z0-9 </dev/urandom | head -c 4`-`tr -dc a-z0-9 </dev/urandom | head -c 4`
