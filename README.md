@@ -9,6 +9,8 @@ This Helm chart deploys the Sonar Sentry DaemonSet on a [Kubernetes](http://kube
 
 ## Installing Logpresso Sonar Sentry
 
+**TENANT: Domain prefix of your logpresso.cloud.**
+
 ```bash
 helm repo add logpresso https://lab.logpresso.com/sonar-sentry-daemonset
 helm repo update logpresso
@@ -26,20 +28,21 @@ helm show values logpresso/sonar-sentry-daemonset
 # Create OWN values-TENANT.yaml using "sonar:" section from previous output
 # You must override deployUrl, baseAddr
 
-helm install TENANT logpresso/sonar-sentry-daemonset -f values-TENANT.yaml
+helm install sonar-sentry logpresso/sonar-sentry-daemonset -f values-TENANT.yaml
 ```
 
 
 ## Uninstalling the Chart
 
 ```bash
-helm uninstall TENANT
+helm uninstall sonar-sentry
 
 ## Uninstalling Sentry Permanently
 helm uninstall sonar-sentry-secrets
 ```
 
 ## Parameters
+
 
 | Parameter | Description | Default |
 | --------- | ----------- | ------- |
