@@ -15,6 +15,9 @@ WORKDIR /root
 # 스크립트 파일 추가
 COPY sonar-sentry-entrypoint.sh /sonar-sentry-entrypoint.sh
 COPY install-docker.sh /root/install-docker.sh
+COPY rq-acquire.sh /root/rq-acquire.sh
+COPY rq-release.sh /root/rq-release.sh
+COPY shutdown.sh /root/shutdown.sh
 COPY logpresso.conf /root/logpresso.conf
 
 # 스크립트 실행 가능하게 변경

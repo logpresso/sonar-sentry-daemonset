@@ -33,7 +33,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "public.ecr.aws/z5g1b4t8/sonar-sentry-dev:1.0.0"
+          image: "public.ecr.aws/z5g1b4t8/sonar-sentry-dev:1.1.8"
           imagePullPolicy: Always
           ports:
             - name: sentry-diag
@@ -74,7 +74,7 @@ spec:
           lifecycle:
             preStop:
               exec:
-                command: ["/bin/sh", "-c", "/opt/logpresso-sentry/logpresso stop"]
+                command: ["/bin/sh", "-c", "/root/shutdown.sh"]
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}

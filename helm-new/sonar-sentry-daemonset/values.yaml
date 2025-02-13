@@ -58,18 +58,31 @@ volumes:
   - name: k8s-log
     hostPath:
       path: /var/log
-      type: Directory
-  # - name: host-docker-desktop-logs
-  #  hostPath:
-  #    path: /var/lib/docker
-  #    type: Directory
+  - name: k8s-log-var-log-pods
+    hostPath:
+      path: /var/log/pods
+  - name: k8s-log-var-log-containers
+    hostPath:
+      path: /var/log/containers
+  - name: k8s-log-var-lib-containers
+    hostPath:
+      path: /var/lib/containers
+  - name: dd-var-lib-docker
+    hostPath:
+      path: /var/lib/docker
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts:
   - name: k8s-log
-    mountPath: /mnt/log
-  # - name: host-container-log
-  #   mountPath: /var/lib/docker
+    mountPath: /var/log/node
+  - name: k8s-log-var-log-pods
+    mountPath: /var/log/pods
+  - name: k8s-log-var-log-containers
+    mountPath: /var/log/containers
+  - name: k8s-log-var-lib-containers
+    mountPath: /var/lib/containers
+  - name: dd-var-lib-docker
+    mountPath: /var/lib/docker
 
 nodeSelector: 
   {}

@@ -1,0 +1,1 @@
+/bin/sh -c /opt/logpresso-sentry/logpresso stop

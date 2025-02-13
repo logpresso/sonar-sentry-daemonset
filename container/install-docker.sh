@@ -7,15 +7,17 @@ RPC_PORT=7140
 CONF_FILE=logpresso.conf
 
 if [ -n "$TOKEN" ]; then
-    echo "Public IP: `curl ifconfig.me`"
+	set -e
+    echo "Public IP: `curl -s ifconfig.me`"
 	#SONAR_API_KEY=${SONAR_API_KEY:-`cat /etc/secrets/sonar-api-key`}
 	echo "Registering Daemonset Sentry..."
 	API_TARGET=${DEPLOY_URL/:44300/:$CONTROL_API_PORT}/api/sonar/sentries
 	echo GUID: $GUID
 	echo API_TARGET: $API_TARGET
-	RESPONSE=$(curl -q -k -X POST "$API_TARGET" \
+	RESPONSE=$(curl -s -k -X POST "$API_TARGET" \
 		-d "sentry_guid=${GUID}&auth_token=${TOKEN}&os=linux&base=$BASE" \
 		-H "Authorization: Bearer ${SONAR_API_KEY}")
+	set +e
 fi
 
 function detect_os_version() {
@@ -105,11 +107,16 @@ error_handling() {
 
     echo "Rollback completed."
 
+    if [ -n "$current_trap" ]; then
+        eval "$current_trap"
+    fi
+
     # Exit with the original error status
     exit $ORIG_ERROR
 }
 
 # Set up the trap to call error_handling function on any error
+current_trap=$(trap -p ERR)
 trap 'error_handling' ERR
 
 # Set the script to exit on error
@@ -216,3 +223,6 @@ set -e
 
 echo "done"
 
+if [ -n "$current_trap" ]; then
+    eval "$current_trap"
+fi
