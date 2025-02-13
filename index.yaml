@@ -3,6 +3,16 @@ entries:
   sonar-sentry-daemonset:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-02-13T13:58:02.501422871+09:00"
+    description: A Helm Chart for Sonar Sentry Daemonset
+    digest: 7db00a42f92d2056249cfb0c6645ca06f9d4e3e91a5d7e70dc1690120cd3e803
+    name: sonar-sentry-daemonset
+    type: application
+    urls:
+    - sonar-sentry-daemonset-0.1.18.tgz
+    version: 0.1.18
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-02-13T13:45:21.085196442+09:00"
     description: A Helm Chart for Sonar Sentry Daemonset
     digest: 115964b34ef6d0c0b8840297195158ad79dd3354e3b0ce755ed98bd696bc0bce
@@ -234,6 +244,17 @@ entries:
   sonar-sentry-secrets:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-02-13T13:58:43.490228752+09:00"
+    description: A Helm Chart to install TENANT-private secrets for Logpresso Sonar
+      Sentry.
+    digest: 7fc6b71f70a63cd6ba24406bdc27b91efc0a478f4eb01394c21e45ecbc2c12d4
+    name: sonar-sentry-secrets
+    type: application
+    urls:
+    - sonar-sentry-secrets-0.0.7.tgz
+    version: 0.0.7
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2025-02-13T13:45:21.089203962+09:00"
     description: A Helm Chart to install TENANT-private secrets for Logpresso Sonar
       Sentry.
@@ -287,4 +308,4 @@ entries:
     urls:
     - sonar-sentry-secrets-0.0.1.tgz
     version: 0.0.1
-generated: "2025-02-13T13:45:21.079480952+09:00"
+generated: "2025-02-13T13:58:43.489879282+09:00"
