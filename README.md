@@ -28,14 +28,14 @@ helm show values logpresso/sonar-sentry-daemonset
 # Create OWN values-TENANT.yaml using "sonar:" section from previous output
 # You must override deployUrl, baseAddr
 
-helm install sonar-sentry logpresso/sonar-sentry-daemonset -f values-TENANT.yaml
+helm install k8s-logger logpresso/sonar-sentry-daemonset -f values-TENANT.yaml -n default
 ```
 
 
 ## Uninstalling the Chart
 
 ```bash
-helm uninstall sonar-sentry
+helm uninstall k8s-logger
 
 ## Uninstalling Sentry Permanently
 helm uninstall sonar-sentry-secrets
