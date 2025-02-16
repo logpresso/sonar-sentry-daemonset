@@ -3,6 +3,16 @@ entries:
   sonar-sentry-daemonset:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-02-17T08:33:23.460821072+09:00"
+    description: A Helm Chart for Sonar Sentry Daemonset
+    digest: 8d5aa43b0aa0701101713873cd2b139d812771e2b4d80c5245b01f6482d7abb6
+    name: sonar-sentry-daemonset
+    type: application
+    urls:
+    - sonar-sentry-daemonset-0.1.19.tgz
+    version: 0.1.19
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-02-13T13:58:02.501422871+09:00"
     description: A Helm Chart for Sonar Sentry Daemonset
     digest: 7db00a42f92d2056249cfb0c6645ca06f9d4e3e91a5d7e70dc1690120cd3e803
@@ -308,4 +318,4 @@ entries:
     urls:
     - sonar-sentry-secrets-0.0.1.tgz
     version: 0.0.1
-generated: "2025-02-13T13:58:43.489879282+09:00"
+generated: "2025-02-17T08:33:23.460436983+09:00"
