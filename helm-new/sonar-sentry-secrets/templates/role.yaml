@@ -4,7 +4,7 @@ metadata:
   name: sonar-sentry-daemonset-role
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "sonar-sentry-daemonset.labels" . | nindent 4 }}
+    {{- include "sonar-sentry-secrets.labels" . | nindent 4 }}
 rules:
 - apiGroups: [""]
   resources: ["resourcequotas"]

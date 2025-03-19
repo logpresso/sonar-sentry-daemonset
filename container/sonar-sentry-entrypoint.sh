@@ -1,10 +1,7 @@
 #!/bin/bash
 
-/bin/bash /root/rq-acquire.sh > /var/run/rq_acquired
-SENTRY_IDENTIFIER=${SENTRY_IDENTIFIER:-$(cat /var/run/rq_acquired)}
-
 function cleanup() {
-	/bin/sh /root/rq-release.sh `cat /var/run/rq_acquired`
+	/opt/logpresso-sentry/logpresso stop
 	if [ -n "$TAIL_PID" ]; then
 		kill $TAIL_PID
 	fi
@@ -12,7 +9,7 @@ function cleanup() {
 
 trap cleanup EXIT SIGTERM SIGINT
 
-if [ ! -d /opt/logpresso-sentry ]; then
+if [ ! -e /opt/logpresso-sentry/data ]; then
 	. /root/install-docker.sh
 	#rm -f /root/install-docker.sh
 fi

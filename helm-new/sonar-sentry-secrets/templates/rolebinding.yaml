@@ -4,10 +4,10 @@ metadata:
   name: sonar-sentry-daemonset-rolebinding
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "sonar-sentry-daemonset.labels" . | nindent 4 }}
+    {{- include "sonar-sentry-secrets.labels" . | nindent 4 }}
 subjects:
 - kind: ServiceAccount
-  name: {{ include "sonar-sentry-daemonset.serviceAccountName" . }}
+  name: {{ include "sonar-sentry-secrets.serviceAccountName" . }}
   namespace: {{ .Release.Namespace }}
 roleRef:
   kind: Role

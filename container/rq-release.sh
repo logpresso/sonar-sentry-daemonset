@@ -16,16 +16,18 @@ fi
 ACQUIRED_ID=$1
 echo "Releasing ${ID_PREFIX}${ACQUIRED_ID}..."
 
-curl --silent --fail \
+RESPONSE=$(curl --silent --fail \
    --cacert ${CACERT} \
    --header "Authorization: Bearer ${TOKEN}" \
    -X DELETE \
-   "${APISERVER}/api/v1/namespaces/${NAMESPACE}/resourcequotas/${ID_PREFIX}${ACQUIRED_ID}"
+   "${APISERVER}/api/v1/namespaces/${NAMESPACE}/resourcequotas/${ID_PREFIX}${ACQUIRED_ID}")
+
 
 if [ $? -eq 0 ]; then
    echo "Successfully released ID: ${ACQUIRED_ID}"
    exit 0
 else
    echo "Failed to release ID: ${ACQUIRED_ID}"
+   echo $RESPONSE
    exit 1
 fi

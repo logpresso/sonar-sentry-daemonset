@@ -4,6 +4,8 @@ metadata:
   name: {{ include "sonar-sentry-daemonset.fullname" . }}
   labels:
     {{- include "sonar-sentry-daemonset.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook-weight": "5"
 spec:
   {{- if not .Values.autoscaling.enabled }}
   {{- end }}
@@ -29,11 +31,12 @@ spec:
       serviceAccountName: {{ include "sonar-sentry-daemonset.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 120
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "public.ecr.aws/z5g1b4t8/sonar-sentry-dev:1.1.8"
+          image: "public.ecr.aws/z5g1b4t8/sonar-sentry-dev:1.2.1"
           imagePullPolicy: Always
           ports:
             - name: sentry-diag
@@ -67,17 +70,23 @@ spec:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          {{- with .Values.volumeMounts }}
           volumeMounts:
-            {{- toYaml . | nindent 12 }}
+          - name: sentry-installation
+            mountPath: /opt/logpresso-sentry
+          {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 10 }}
           {{- end }}
           lifecycle:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "/root/shutdown.sh"]
-      {{- with .Values.volumes }}
       volumes:
-        {{- toYaml . | nindent 8 }}
+      - name: sentry-installation
+        hostPath:
+          type: DirectoryOrCreate
+          path: /var/local/logpresso-sentry
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 6 }}
       {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
