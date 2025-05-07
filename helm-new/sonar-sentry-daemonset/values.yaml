@@ -70,6 +70,9 @@ volumes:
   - name: dd-var-lib-docker
     hostPath:
       path: /var/lib/docker
+  - name: app-logs
+    hostPath:
+      path: /log/WAS/tlo
 
 # Additional volumeMounts on the output Deployment definition.
 volumeMounts:
@@ -83,6 +86,8 @@ volumeMounts:
     mountPath: /var/lib/containers
   - name: dd-var-lib-docker
     mountPath: /var/lib/docker
+  - name: app-logs
+    mountPath: /in-daemonset/log/WAS/tlo
 
 nodeSelector: 
   {}
@@ -98,5 +103,6 @@ sonar:
   guidSuffix: ""
   deployUrl: https://TENANT.logpresso.cloud:44300 
   baseAddr: TENANT.nlb.logpresso.cloud
+  sentryImageVersion: latest
   secret:
     name: "sonar-sentry-secrets"

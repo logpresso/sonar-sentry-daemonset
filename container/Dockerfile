@@ -28,7 +28,6 @@ RUN chmod +x /root/install-docker.sh
 ENV AUTH_TOKEN=9225-msen
 ENV DEPLOY_URL=https://host.docker.internal:44300
 ENV BASE_ADDR=host.docker.internal
-ENV GUID=k8s-test
 
 # 엔트리포인트 스크립트 설정
 ENTRYPOINT ["/sonar-sentry-entrypoint.sh"]

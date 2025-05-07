@@ -1,5 +1,18 @@
-SENTRY_IDENTIFIER=${SENTRY_IDENTIFIER:-$(echo -n $K8S_NODE_NAME | sha1sum | cut -c 1-6)}
-GUID=${SENTRY_GUID_PREFIX:-sonar-sentry-}$SENTRY_IDENTIFIER
+# Try to generate GUID based on hostname
+if command -v hostname &> /dev/null; then
+    GUID=$(hostname)
+elif [ -f /proc/sys/kernel/hostname ]; then
+    GUID=$(cat /proc/sys/kernel/hostname)
+elif [ -f /etc/hostname ]; then
+    GUID=$(cat /etc/hostname)
+elif [ -n "$K8S_NODE_NAME" ]; then
+    # Use Kubernetes node name if available
+    GUID="sonar-sentry-$K8S_NODE_NAME"
+else
+    echo "Error: Could not determine hostname or K8S_NODE_NAME for GUID"
+    exit 1
+fi
+
 TOKEN=${SENTRY_AUTH_TOKEN}
 URL=$DEPLOY_URL
 BASE=$BASE_ADDR
@@ -42,11 +55,10 @@ if [ "$USER_ID" != "root" ]; then
     exit 1
 fi
 
-if [ -z "$GUID" ]; then GUID="$1"; fi
 if [ -z "$TOKEN" ]; then TOKEN="$2"; fi
 if [ -z "$URL" ]; then URL="$3"; fi
 
-if [ -z "$GUID" ] || [ -z "$TOKEN" ] || [ -z "$URL" ]; then
+if [ -z "$TOKEN" ] || [ -z "$URL" ]; then
     echo GUID: [$GUID]
     echo TOKEN: [$TOKEN]
     echo URL: [$URL]

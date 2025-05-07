@@ -36,7 +36,7 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
-          image: "public.ecr.aws/z5g1b4t8/sonar-sentry-dev:1.2.1"
+          image: "public.ecr.aws/z5g1b4t8/sonar-sentry-dev:{{ .Values.sonar.sentryImageVersion | default "latest" }}"
           imagePullPolicy: Always
           ports:
             - name: sentry-diag
@@ -61,6 +61,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: SONAR_LOGGERS_CONFIG_PATH
+              value: "/etc/sonar/loggers/loggers.json"
             {{- with .Values.env }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -69,10 +71,17 @@ spec:
           readinessProbe:
             {{- toYaml .Values.readinessProbe | nindent 12 }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu | default "500m" }}
+              memory: {{ .Values.resources.limits.memory | default "512Mi" }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu | default "200m" }}
+              memory: {{ .Values.resources.requests.memory | default "256Mi" }}
           volumeMounts:
           - name: sentry-installation
             mountPath: /opt/logpresso-sentry
+          - name: sonar-loggers-config
+            mountPath: /etc/sonar/loggers
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 10 }}
           {{- end }}
@@ -85,6 +94,9 @@ spec:
         hostPath:
           type: DirectoryOrCreate
           path: /var/local/logpresso-sentry
+      - name: sonar-loggers-config
+        configMap:
+          name: {{ include "sonar-sentry-daemonset.fullname" . }}-loggers
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 6 }}
       {{- end }}
