@@ -38,3 +38,10 @@ popd
 rm -rf tmp
 
 git add README.md index.yaml *.tgz
+
+COMMIT_TEMP=$(mktemp)
+echo $NEW_VERSION > "$COMMIT_TEMP"
+
+git cmv --template="$COMMIT_TEMP" && git push
+
+rm "$COMMIT_TEMP"
