@@ -1,0 +1,15 @@
+{{- if and false (eq (include "sonar-sentry.deploymentType" .) "Deployment") }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "sonar-sentry.fullname" . }}-pvc
+  labels:
+    {{- include "sonar-sentry.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.sonarSentryPvc.size | default "10Gi" }}
+  storageClassName: {{ include "sonar-sentry.fullname" . }}-sc
+{{- end }} 

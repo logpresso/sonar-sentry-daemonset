@@ -1,17 +1,18 @@
 apiVersion: apps/v1
-kind: DaemonSet
+kind: {{ include "sonar-sentry.deploymentType" . }}
 metadata:
-  name: {{ include "sonar-sentry-daemonset.fullname" . }}
+  name: {{ include "sonar-sentry.fullname" . }}
   labels:
-    {{- include "sonar-sentry-daemonset.labels" . | nindent 4 }}
+    {{- include "sonar-sentry.labels" . | nindent 4 }}
   annotations:
     "helm.sh/hook-weight": "5"
 spec:
-  {{- if not .Values.autoscaling.enabled }}
+  {{- if eq (include "sonar-sentry.deploymentType" .) "Deployment" }}
+  replicas: 1
   {{- end }}
   selector:
     matchLabels:
-      {{- include "sonar-sentry-daemonset.selectorLabels" . | nindent 6 }}
+      {{- include "sonar-sentry.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -19,7 +20,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "sonar-sentry-daemonset.labels" . | nindent 8 }}
+        {{- include "sonar-sentry.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -28,7 +29,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "sonar-sentry-daemonset.serviceAccountName" . }}
+      serviceAccountName: {{ include "sonar-sentry.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       terminationGracePeriodSeconds: 120
@@ -54,9 +55,9 @@ spec:
             - name: BASE_ADDR
               value: "{{- .Values.sonar.baseAddr -}}"
             - name: "SENTRY_GUID_PREFIX"
-              value: "{{- include "sonar-sentry-daemonset.guidPrefix" . -}}"
-            - name: CONTROL_API_PORT
-              value: "{{ default 443 .Values.sonar.controlApiPort }}"
+              value: "{{- include "sonar-sentry.guidPrefix" . -}}"
+            - name: DEPLOY_API_PORT
+              value: "{{ default 443 .Values.sonar.deployApiPort }}"
             - name: K8S_NODE_NAME
               valueFrom:
                 fieldRef:
@@ -80,8 +81,6 @@ spec:
           volumeMounts:
           - name: sentry-installation
             mountPath: /opt/logpresso-sentry
-          - name: sonar-loggers-config
-            mountPath: /etc/sonar/loggers
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 10 }}
           {{- end }}
@@ -91,12 +90,15 @@ spec:
                 command: ["/bin/sh", "-c", "/root/shutdown.sh"]
       volumes:
       - name: sentry-installation
+        {{- if or true (eq (include "sonar-sentry.deploymentType" .) "DaemonSet") }}
         hostPath:
           type: DirectoryOrCreate
           path: /var/local/logpresso-sentry
-      - name: sonar-loggers-config
-        configMap:
-          name: {{ include "sonar-sentry-daemonset.fullname" . }}-loggers
+        {{- else }}
+        persistentVolumeClaim:
+          claimName: {{ include "sonar-sentry.fullname" . }}-pvc
+          readOnly: false 
+        {{- end }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 6 }}
       {{- end }}

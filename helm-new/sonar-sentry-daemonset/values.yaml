@@ -1,6 +1,3 @@
-# Sonar Sentries are Daemonset
-# replicaCount: 1
-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
@@ -99,10 +96,16 @@ affinity: {}
 
 ## Override the following section as needed
 sonar:
+  deploymentType: "Deployment" # Deployment or DaemonSet (Case Sensitive)
   guidPrefix: ""
-  guidSuffix: ""
   deployUrl: https://TENANT.logpresso.cloud:44300 
   baseAddr: TENANT.nlb.logpresso.cloud
+  deployApiPort: 443
   sentryImageVersion: latest
   secret:
     name: "sonar-sentry-secrets"
+
+sonarSentryPvc:
+  enabled: true
+  size: 10Gi
+  availabilityZone: "ap-northeast-2a"

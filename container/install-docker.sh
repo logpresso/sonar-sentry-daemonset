@@ -20,17 +20,22 @@ RPC_PORT=7140
 CONF_FILE=logpresso.conf
 
 if [ -n "$TOKEN" ]; then
-	set -e
     echo "Public IP: `curl -s ifconfig.me`"
 	#SONAR_API_KEY=${SONAR_API_KEY:-`cat /etc/secrets/sonar-api-key`}
-	echo "Registering Daemonset Sentry..."
-	API_TARGET=${DEPLOY_URL/:44300/:$CONTROL_API_PORT}/api/sonar/sentries
+	echo "Registering Logpresso Sentry..."
+	API_TARGET=${DEPLOY_URL/:44300/:$DEPLOY_API_PORT}/api/sonar/sentries
 	echo GUID: $GUID
 	echo API_TARGET: $API_TARGET
 	RESPONSE=$(curl -s -k -X POST "$API_TARGET" \
 		-d "sentry_guid=${GUID}&auth_token=${TOKEN}&os=linux&base=$BASE" \
 		-H "Authorization: Bearer ${SONAR_API_KEY}")
-	set +e
+    if [ $? -eq 0 ]; then
+        echo "Logpresso Sentry registered successfully."
+    else
+        echo "Failed to register Logpresso Sentry."
+        echo "Response: $RESPONSE"
+        exit 1
+    fi
 fi
 
 function detect_os_version() {

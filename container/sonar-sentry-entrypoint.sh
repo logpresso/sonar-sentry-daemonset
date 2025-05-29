@@ -6,9 +6,14 @@
 # then attempts to register the sentry and create collectors based on those settings.
 
 function cleanup() {
-	/opt/logpresso-sentry/logpresso stop
-	if [ -n "$TAIL_PID" ]; then
-		kill $TAIL_PID
+	echo "Cleanup: Cleaning up processes in container..."
+	if [ -e /opt/logpresso-sentry/logpresso ]; then
+		/opt/logpresso-sentry/logpresso stop
+		if [ -n "$TAIL_PID" ]; then
+			kill $TAIL_PID
+		fi
+	else
+		echo "Cleanup: Logpresso Sentry is not installed."
 	fi
 }
 
