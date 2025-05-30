@@ -3,6 +3,16 @@ entries:
   sonar-sentry:
   - apiVersion: v2
     appVersion: 1.0.0
+    created: "2025-05-30T12:59:32.278534207+09:00"
+    description: A Helm Chart for Sonar Sentry
+    digest: c2ad0e39d18f9527303c5a4dd20bc5a163b7b568b2574a2dcfb608983347cddb
+    name: sonar-sentry
+    type: application
+    urls:
+    - sonar-sentry-0.1.31.tgz
+    version: 0.1.31
+  - apiVersion: v2
+    appVersion: 1.0.0
     created: "2025-05-29T18:33:59.193870735+09:00"
     description: A Helm Chart for Sonar Sentry
     digest: 2f0acab53ad945da759357c93f11047a7e73ea1750c121d884c51734d86bf7d2
@@ -389,4 +399,4 @@ entries:
     urls:
     - sonar-sentry-secrets-0.0.1.tgz
     version: 0.0.1
-generated: "2025-05-29T18:33:59.193358473+09:00"
+generated: "2025-05-30T12:59:32.278073654+09:00"
