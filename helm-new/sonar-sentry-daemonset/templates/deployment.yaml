@@ -62,8 +62,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-            - name: SONAR_LOGGERS_CONFIG_PATH
-              value: "/etc/sonar/loggers/loggers.json"
             {{- with .Values.env }}
               {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -88,6 +86,47 @@ spec:
             preStop:
               exec:
                 command: ["/bin/sh", "-c", "/root/shutdown.sh"]
+      {{- if .Values.sonar.resetIfOlderThan }}
+      initContainers:
+      - name: cleanup
+        image: busybox
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          # Check if reset date is set
+          if [ -z "{{ .Values.sonar.resetIfOlderThan }}" ]; then
+            echo "No reset date specified, skipping cleanup"
+            exit 0
+          fi
+
+          # Get the last modification time of the directory
+          if [ -d "/opt/logpresso-sentry" ]; then
+            LAST_MOD=$(stat -c %Y /opt/logpresso-sentry)
+            RESET_TIME=$(date -d "$(echo {{ .Values.sonar.resetIfOlderThan }} | sed 's/T/ /')" +%s)
+            
+            if [ "$LAST_MOD" -lt "$RESET_TIME" ]; then
+              echo "Starting cleanup of /opt/logpresso-sentry (last modified: $(date -d @$LAST_MOD))"
+              echo "Contents before cleanup:"
+              ls -la /opt/logpresso-sentry/ || echo "Directory is empty or doesn't exist"
+              
+              rm -rf /opt/logpresso-sentry/*
+              rm -rf /opt/logpresso-sentry/.*  2>/dev/null || true
+              
+              echo "Cleanup completed"
+              echo "Contents after cleanup:"
+              ls -la /opt/logpresso-sentry/ || echo "Directory is now empty"
+            else
+              echo "Skipping cleanup - directory is newer than reset date"
+            fi
+          else
+            echo "Directory does not exist, no cleanup needed"
+          fi
+        volumeMounts:
+        - name: sentry-installation
+          mountPath: /opt/logpresso-sentry
+        securityContext:
+          privileged: true
+      {{- end }}
       volumes:
       - name: sentry-installation
         {{- if or true (eq (include "sonar-sentry.deploymentType" .) "DaemonSet") }}

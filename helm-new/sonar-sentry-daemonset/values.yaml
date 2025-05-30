@@ -96,7 +96,8 @@ affinity: {}
 
 ## Override the following section as needed
 sonar:
-  deploymentType: "Deployment" # Deployment or DaemonSet (Case Sensitive)
+  deploymentType: "DaemonSet" # DaemonSet or Deployment
+  resetInstallDate: ""  # Format: "2024-03-14 15:04:05", must be in UTC
   guidPrefix: ""
   deployUrl: https://TENANT.logpresso.cloud:44300 
   baseAddr: TENANT.nlb.logpresso.cloud

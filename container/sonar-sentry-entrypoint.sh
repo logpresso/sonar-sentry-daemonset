@@ -22,12 +22,6 @@ trap cleanup EXIT SIGTERM SIGINT
 if [ ! -e /opt/logpresso-sentry/data ]; then
 	. /root/install-docker.sh
 	
-	# 센트리 등록 시도
-	/opt/logpresso-sentry/bin/register-sentry.sh
-	
-	# 수집기 생성 시도 
-	/opt/logpresso-sentry/bin/create-collectors.sh
-	
 	#rm -f /root/install-docker.sh
 fi
 
