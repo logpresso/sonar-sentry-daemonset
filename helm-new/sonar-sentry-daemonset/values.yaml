@@ -34,13 +34,13 @@ securityContext: {}
 ingress:
   enabled: false
 
-resources: {}
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+resources:
+  limits:
+    cpu: 1500m
+    memory: 512Mi
+  requests:
+    cpu: 1001m
+    memory: 384Mi
 
 # not supported yet
 # livenessProbe:
@@ -97,16 +97,13 @@ affinity: {}
 ## Override the following section as needed
 sonar:
   deploymentType: "DaemonSet" # DaemonSet or Deployment
-  resetInstallDate: ""  # Format: "2024-03-14 15:04:05", must be in UTC
+  resetIfOlderThan: ""  # Format: "2024-03-14 15:04:05", must be in UTC
   guidPrefix: ""
   deployUrl: https://TENANT.logpresso.cloud:44300 
   baseAddr: TENANT.nlb.logpresso.cloud
   deployApiPort: 443
   sentryImageVersion: latest
+  sentryInstallationPath: "" # Set the path to install Sentry on EFS volume to prevent logging-state loss. Configure according to your EFS volume mount settings.
+  useNamespaceInHostPath: false # Set to true to add namespace name to host path when deploying to multiple namespaces.
   secret:
     name: "sonar-sentry-secrets"
-
-sonarSentryPvc:
-  enabled: true
-  size: 10Gi
-  availabilityZone: "ap-northeast-2a"

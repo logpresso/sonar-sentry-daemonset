@@ -82,3 +82,14 @@ Deployment
 Deployment
 {{- end -}}
 {{- end -}}
+
+{{/*
+Get the Sentry installation path with fallback to default
+*/}}
+{{- define "sonar-sentry.sentryInstallationPath" -}}
+{{- if .Values.sonar.sentryInstallationPath -}}
+{{- .Values.sonar.sentryInstallationPath -}}
+{{- else -}}
+/opt/logpresso-sentry
+{{- end -}}
+{{- end -}}

@@ -58,6 +58,12 @@ spec:
               value: "{{- include "sonar-sentry.guidPrefix" . -}}"
             - name: DEPLOY_API_PORT
               value: "{{ default 443 .Values.sonar.deployApiPort }}"
+            - name: DEPLOYMENT_TYPE
+              value: "{{- include "sonar-sentry.deploymentType" . -}}"
+            - name: CHART_NAME
+              value: "{{- .Chart.Name -}}"
+            - name: RELEASE_NAME
+              value: "{{- .Release.Name -}}"
             - name: K8S_NODE_NAME
               valueFrom:
                 fieldRef:
@@ -78,7 +84,7 @@ spec:
               memory: {{ .Values.resources.requests.memory | default "256Mi" }}
           volumeMounts:
           - name: sentry-installation
-            mountPath: /opt/logpresso-sentry
+            mountPath: {{ include "sonar-sentry.sentryInstallationPath" . }}
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 10 }}
           {{- end }}
@@ -132,7 +138,7 @@ spec:
         {{- if or true (eq (include "sonar-sentry.deploymentType" .) "DaemonSet") }}
         hostPath:
           type: DirectoryOrCreate
-          path: /var/local/logpresso-sentry
+          path: /var/local/logpresso-sentry{{- if .Values.sonar.useNamespaceInHostPath }}/{{ .Release.Namespace }}{{- end }}
         {{- else }}
         persistentVolumeClaim:
           claimName: {{ include "sonar-sentry.fullname" . }}-pvc
